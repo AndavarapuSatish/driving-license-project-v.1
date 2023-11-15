@@ -1,7 +1,6 @@
 var express = require("express");
 var cors = require("cors");
 var multer = require("multer");
-var twilio = require("twilio");
 var bodyParser = require("body-parser");
 var mongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
@@ -13,9 +12,7 @@ const corsOptions = {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
-  const accountSid = 'AC90f46dd8f7f6d3c52ad8d85f5f2bec64';
-  const authToken = 'c9c3945ba599d9f851c0de78e9ca294e';
-  const client = twilio(accountSid, authToken);
+  
   
   
 
@@ -57,21 +54,7 @@ app.get("/users", (req, res)=>{
     });
 });
 
-function sendCongratulationsSMS(toPhone) {
-    client.messages
-        .create({
-            body: 'Congratulations! You have created your account successfully for the Driving License process.',
-            from: '+12104174815',
-            to: toPhone
-        })
-        .then((message) => {
-            console.log('SMS sent with SID:', message.sid);
-            console.log('User phone number:', toPhone);
-        })
-        .catch((error) => {
-            console.error('Error sending SMS:', error);
-        });
-}
+
 
 //for adding user in the database of tbl_Users collection
 app.post("/adduser", (req, res) => {
@@ -90,7 +73,6 @@ app.post("/adduser", (req, res) => {
                 if (!err && mainUser) {
                     const userPhone = mainUser.phone;
                     // Send the "Congratulations" SMS
-                    sendCongratulationsSMS(userPhone);
                 }
             });
 
