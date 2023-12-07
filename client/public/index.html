@@ -106,8 +106,9 @@
             <div class="form-floating mt-3">
               <input type="password" class="form-control" id="repassword" placeholder="Re enter Password" required style="width: 250px;">
               <label for="repassword">Re-Enter a Password</label>
+              <span id="passwordMatchError" class="error-message text-danger"></span>
             </div>
-            <button type="submit" class="form-control mt-3" id="btnRegister">Register</button>  
+            <button type="button" class="form-control mt-3" id="btnRegister">Register</button>  
           </div>
         </div>
 
@@ -530,6 +531,12 @@ function updatePasswordHints(password, lengthId, capitalId, specialId, numberId,
             password: $("#password").val(),
             repassword: $("#repassword").val()
         };
+
+        if (user.password !== user.repassword) {
+            $("#passwordMatchError").text("Passwords do not match");
+            return;
+        }
+
         $.ajax({
             method: "post",
             url: "http://127.0.0.1:4000/adduser",
@@ -545,6 +552,7 @@ function updatePasswordHints(password, lengthId, capitalId, specialId, numberId,
                             // const userPhone = registeredUser.phone;
                             sendCongratulationsEmail(userEmail);
                             // sendCongratulationsSMS(userPhone);
+                            $("#passwordMatchError").text("");
                         } else {
                             alert("Registered user not found.");
                         }
